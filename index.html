@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Square Country National Debt Clock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --navy: #0a1f44;
+      --navy-dark: #08172f;
+      --accent: #c9a24d;
+      --bg: #f4f6fa;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: #111;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .clock {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .currency {
+      font-size: 1.6rem;
+      vertical-align: top;
+      margin-right: 0.25rem;
+    }
+
+    .substats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .stat {
+      background: #f9fafc;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.95rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .stat p {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+      margin: 3rem 1rem 1.5rem;
+    }
+
+    footer strong {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Square Country National Debt Clock</h1>
+  <p>Live estimate of government debt (fictional figures)</p>
+</header>
+
+<main>
+  <section class="clock">
+    <div class="label">Total National Debt</div>
+    <div class="value">
+      <span class="currency">$</span><span id="debt">0</span>
+    </div>
+
+    <div class="substats">
+      <div class="stat">
+        <h3>Debt Per Citizen</h3>
+        <p>$<span id="perCapita">0</span></p>
+      </div>
+      <div class="stat">
+        <h3>Debt Per Household</h3>
+        <p>$<span id="perHousehold">0</span></p>
+      </div>
+      <div class="stat">
+        <h3>Debt Increase Per Second</h3>
+        <p>$<span id="perSecond">0</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><strong>Disclaimer:</strong> This debt clock is entirely fictional and created for Square Country.
+     Figures do not represent real economic data.</p>
+</footer>
+
+<script>
+  // ---- Fictional baseline data ----
+  const initialDebt = 487_250_000_000; // $487.25b at start time
+  const debtIncreasePerSecond = 14_250; // grows by $14,250 every second
+
+  const population = 18_400_000;   // fictional population
+  const households = 6_200_000;    // fictional households
+
+  // Fixed fictional start time (epoch ms)
+  const startTime = new Date("2026-01-01T00:00:00Z").getTime();    // fictional households
+
+  const debtEl = document.getElementById("debt");
+  const perCapitaEl = document.getElementById("perCapita");
+  const perHouseholdEl = document.getElementById("perHousehold");
+  const perSecondEl = document.getElementById("perSecond");
+
+  function formatNumber(num) {
+    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  }
+
+  function updateClock() {
+    const now = Date.now();
+    const secondsElapsed = Math.floor((now - startTime) / 1000);
+
+    const totalDebt = initialDebt + (secondsElapsed * debtIncreasePerSecond);
+
+    debtEl.textContent = formatNumber(totalDebt);
+    perCapitaEl.textContent = formatNumber(totalDebt / population);
+    perHouseholdEl.textContent = formatNumber(totalDebt / households);
+    perSecondEl.textContent = formatNumber(debtIncreasePerSecond);
+  }
+
+  // Initial render
+  updateClock();
+
+  // Update every second
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
